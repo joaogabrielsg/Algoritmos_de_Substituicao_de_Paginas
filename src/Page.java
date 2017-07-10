@@ -16,13 +16,15 @@ public class Page {
     public Page(Reference reference) {
         this.value = reference.value;
         switch (reference.access){
-            case "R":
+            case "82":
                 this.R = 1;
                 this.M = 0;
+                break;
 
-            case "W":
+            case "87":
                 this.R = 1;
                 this.M = 1;
+                break;
         }
     }
 

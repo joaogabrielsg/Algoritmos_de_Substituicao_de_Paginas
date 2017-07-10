@@ -30,7 +30,7 @@ public class NUR {
     public void setPageInMemory(Reference reference){
         hints++;
         for(Page page: list){
-            if(page.value == reference.value){
+            if(page.value == reference.value.intValue()){
                 Page newPage = new Page(reference);
                 list.set(list.indexOf(page), newPage);
             }

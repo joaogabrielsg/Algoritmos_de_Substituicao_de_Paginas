@@ -24,23 +24,25 @@ public class Menu {
 
         System.out.printf("\nConteúdo do arquivo texto:\n");
 
-//        int hints = NUR.hint(File.readFile(nome), 5, 30);
-//        System.out.print(hints);
-
-        for(int i = 60; i<=75; i++){
-            System.out.print("frames" + String.valueOf(i) + ": ");
-
-            int hints = FIFO.hint(File.readFile(nome), i);
-            int hintsMRU = MRU.hint(File.readFile(nome), i);
-
-            System.out.println(hints);
-            hintsTotalFIFO.add(Integer.valueOf(hints));
-            hintsTotalMRU.add(Integer.valueOf(hintsMRU));
+        for(int i = 60; i<=75; i++) {
+            int hints = NUR.hint(File.readFile(nome), i, 500);
+            System.out.println("frame" + i + ": " + hints);
         }
 
-        LineChart chart = new LineChart(60, hintsTotalFIFO, hintsTotalMRU);
-        chart.pack( );
-        RefineryUtilities.centerFrameOnScreen( chart );
-        chart.setVisible( true );
+//        for(int i = 60; i<=75; i++){
+//            System.out.print("frames" + String.valueOf(i) + ": ");
+//
+//            int hints = FIFO.hint(File.readFile(nome), i);
+//            int hintsMRU = MRU.hint(File.readFile(nome), i);
+//
+//            System.out.println(hints);
+//            hintsTotalFIFO.add(Integer.valueOf(hints));
+//            hintsTotalMRU.add(Integer.valueOf(hintsMRU));
+//        }
+//
+//        LineChart chart = new LineChart(60, hintsTotalFIFO, hintsTotalMRU);
+//        chart.pack( );
+//        RefineryUtilities.centerFrameOnScreen( chart );
+//        chart.setVisible( true );
     }
 }
