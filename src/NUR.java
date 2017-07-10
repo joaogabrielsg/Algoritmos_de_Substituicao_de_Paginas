@@ -32,6 +32,9 @@ public class NUR {
         for(Page page: list){
             if(page.value == reference.value.intValue()){
                 Page newPage = new Page(reference);
+                if (page.M > newPage.M){
+                    newPage.M = page.M;
+                }
                 list.set(list.indexOf(page), newPage);
             }
         }
@@ -62,7 +65,6 @@ public class NUR {
             Page index = list.get(indexsmallerClassPage);
 
             int index2 = memory.indexOf(index.value);
-
             memory.set(index2, reference.value);
 
             list.remove(indexsmallerClassPage);
