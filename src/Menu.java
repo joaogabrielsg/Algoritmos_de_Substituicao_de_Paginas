@@ -63,8 +63,6 @@ public class Menu {
             hintsTotalSecondChance.add(Integer.valueOf(hintsSecondChance));
             hintsTotalNUR.add(Integer.valueOf(hintsNUR));
             hintsTotalBest.add(Integer.valueOf(hintsBest));
-
-
         }
 
         LineChart chart = new LineChart(60, hintsTotalFIFO, hintsTotalMRU, hintsTotalSecondChance, hintsTotalNUR, hintsTotalBest);
