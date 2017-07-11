@@ -53,16 +53,25 @@ public class LineChart extends ApplicationFrame {
                 "Frames vs Hints", "Frames", "Hints", (XYDataset) createDataset(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR, hintsBest),
                 PlotOrientation.VERTICAL, true, true, false);
 
+        double tickUnit = 1000.0;
+
+        if (hintsFIFO.get(0) < 1000){
+            tickUnit = 100.0;
+            if (hintsFIFO.get(0) < 100){
+                tickUnit = 10.0;
+            }
+        }
+
         XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
 
         NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        domain.setRange(startFrame, hintsFIFO.size() + startFrame);
+        domain.setRange(startFrame - 1, hintsFIFO.size() + startFrame);
         domain.setTickUnit(new NumberTickUnit(1.0));
         domain.setVerticalTickLabels(true);
 
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(hintsFIFO.get(0), hintsMRU.get(hintsMRU.size() - 1));
-        range.setTickUnit(new NumberTickUnit(1000.0));
+        range.setRange(hintsFIFO.get(0) - tickUnit, hintsMRU.get(hintsMRU.size() - 1) + tickUnit);
+        range.setTickUnit(new NumberTickUnit(tickUnit));
 
         return  jfreechart;
     }
