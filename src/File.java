@@ -10,29 +10,28 @@ import java.util.*;
 
 public class File {
 
-    public static ArrayList<Reference> readFile(String fileName) {
+    public static ArrayList<Reference> readFile(java.io.File file) {
 
         ArrayList<Reference> dataComplete = new ArrayList<> ();
         String value = "";
 
-        InputStream inputstream;
         try {
-            inputstream = new FileInputStream(fileName);
-            int data = inputstream.read();
+            FileInputStream stream = new FileInputStream(file);
+            int data = stream.read();
 
             while(data != -1){
                 if (data>=48 && data<=57){
                     while(data>=48 && data<=57){
                         value = value.concat(String.valueOf(data));
-                        data = inputstream.read();
+                        data = stream.read();
                     }
                     Integer page = Integer.valueOf(value);
                     String access = String.valueOf(data);
                     dataComplete.add(new Reference(page, access));
                     value = new String();
                 }
-                data = inputstream.read();
-                data = inputstream.read();
+                data = stream.read();
+                data = stream.read();
             }
 
 //            while (data != -1) {
@@ -41,7 +40,7 @@ public class File {
 //                dataComplete.add(String.valueOf(data));
 //            }
 
-            inputstream.close();
+            stream.close();
             
         } catch (FileNotFoundException e1) {
             // TODO Auto-generated catch block

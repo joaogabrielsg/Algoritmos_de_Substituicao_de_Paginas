@@ -10,9 +10,17 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JFrame.*;
+import javax.swing.JFileChooser;
+import javax.swing.*;
 
 public class Menu {
     public static void main(String[] argv){
+
+        JWindow window = new JWindow();
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(window);
+        java.io.File file = chooser.getSelectedFile();
 
         ArrayList<Integer> hintsTotalFIFO = new ArrayList<>();
         ArrayList<Integer> hintsTotalMRU = new ArrayList<>();
@@ -21,9 +29,6 @@ public class Menu {
         ArrayList<Integer> hintsTotalBest = new ArrayList<>();
 
         Scanner ler = new Scanner(System.in);
-
-        System.out.printf("Informe o nome de arquivo texto:\n");
-        String nome = ler.nextLine();
 
         System.out.printf("Quantidade de frames inicial:\n");
         String framesStart = ler.nextLine();
@@ -44,18 +49,18 @@ public class Menu {
         for(int i = Integer.valueOf(framesStart); i <= Integer.valueOf(framesEnd); i++){
             System.out.print("frames" + String.valueOf(i) + ": ");
 
-            int hints = FIFO.hint(File.readFile(nome), i);
-            int hintsMRU = MRU.hint(File.readFile(nome), i);
-            int hintsSecondChance = SecondChance.hint(File.readFile(nome), i, Integer.valueOf(time));
-            int hintsNUR = NUR.hint(File.readFile(nome), i, Integer.valueOf(time));
-            int hintsBest = Best.hint(File.readFile(nome), i);
+            int hints = FIFO.hint(File.readFile(file), i);
+            int hintsMRU = MRU.hint(File.readFile(file), i);
+            int hintsSecondChance = SecondChance.hint(File.readFile(file), i, Integer.valueOf(time));
+            int hintsNUR = NUR.hint(File.readFile(file), i, Integer.valueOf(time));
+            int hintsBest = Best.hint(File.readFile(file), i);
 
 
             System.out.print(hints);
-            System.out.print("       " + hintsMRU);
-            System.out.print("       " + hintsSecondChance);
-            System.out.print("       " + hintsNUR);
-            System.out.println("       " + hintsBest);
+            System.out.print("         " + hintsMRU);
+            System.out.print("         " + hintsSecondChance);
+            System.out.print("         " + hintsNUR);
+            System.out.println("         " + hintsBest);
 
 
             hintsTotalFIFO.add(Integer.valueOf(hints));
