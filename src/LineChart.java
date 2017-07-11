@@ -50,7 +50,7 @@ public class LineChart extends ApplicationFrame {
 
     private JFreeChart createPanel(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR, ArrayList<Integer> hintsBest){
         JFreeChart jfreechart = ChartFactory.createScatterPlot(
-                "Frames vs Hints", "Frames", "Hints", (XYDataset) createDataset(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR, hintsBest),
+                "Frames vs Hits", "Frames", "Hits", (XYDataset) createDataset(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR, hintsBest),
                 PlotOrientation.VERTICAL, true, true, false);
 
         double tickUnit = 1000.0;
@@ -70,7 +70,7 @@ public class LineChart extends ApplicationFrame {
         domain.setVerticalTickLabels(true);
 
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(hintsFIFO.get(0) - tickUnit, hintsMRU.get(hintsMRU.size() - 1) + tickUnit);
+        range.setRange(hintsFIFO.get(0) - tickUnit, hintsBest.get(hintsMRU.size() - 1) + tickUnit);
         range.setTickUnit(new NumberTickUnit(tickUnit));
 
         return  jfreechart;

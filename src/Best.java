@@ -2,35 +2,38 @@
  * Created by joaogabriel on 10/07/17.
  */
 
+
 import java.util.ArrayList;
 
 public class Best {
-    public static int hint(ArrayList<Reference> referenceStandart, int frames){
+    public static int hint(ArrayList<Reference> references, int frames){
 
         ArrayList<Integer> memory = new ArrayList<>(frames);
         ArrayList<Integer> list = new ArrayList<>(frames);
 
-        int hints = 0;
+        int hits = 0;
+        int faults = 0;
 
-        for (Reference reference: referenceStandart) {
-
+        for (int i = 0; i < references.size(); i++) {
+            Reference reference = references.get(i);
             if (memory.contains(reference.value)){
-                hints++;
-            }else{
-                if (memory.size() < frames){
+                hits++;
+            } else {
+                faults++;
+                if (memory.size() < frames) {
 
                     memory.add(reference.value);
                     list.add(reference.value);
 
-                }else {
+                } else {
 
-                    ArrayList<Reference> referenceSubList = new ArrayList<>(referenceStandart.subList(referenceStandart.indexOf(reference), referenceStandart.size() - 1));
-                    ArrayList<Integer> listSubList = list;
+                    ArrayList<Reference> referenceSubList = new ArrayList<>(references.subList(i, references.size() - 1));
+                    ArrayList<Integer> listSubList = (ArrayList<Integer>) list.clone();
 
-                    for(Reference reference1: referenceSubList){
-                        if (listSubList.size() == 1){
+                    for(Reference reference1: referenceSubList) {
+                        if (listSubList.size() == 1) {
                             break;
-                        }else {
+                        } else {
                             if (listSubList.contains(reference1.value)){
                                 listSubList.remove(reference1.value);
                             }
@@ -47,6 +50,6 @@ public class Best {
             }
         }
 
-        return hints;
+        return hits;
     }
 }
