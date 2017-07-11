@@ -24,10 +24,10 @@ import java.util.ArrayList;
 
 public class LineChart extends ApplicationFrame {
 
-    public LineChart(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR) {
+    public LineChart(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR, ArrayList<Integer> hintsBest) {
         super("Parent`s Job");
 
-        JFreeChart xylineChart = createPanel(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR);
+        JFreeChart xylineChart = createPanel(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR, hintsBest);
 
         ChartPanel chartPanel = new ChartPanel( xylineChart );
         chartPanel.setPreferredSize( new java.awt.Dimension( 1200 , 700 ) );
@@ -38,69 +38,79 @@ public class LineChart extends ApplicationFrame {
         renderer.setSeriesPaint( 1 , Color.GREEN );
         renderer.setSeriesPaint( 2 , Color.YELLOW );
         renderer.setSeriesPaint( 3 , Color.BLUE );
+        renderer.setSeriesPaint(4, Color.black);
         renderer.setSeriesStroke( 0 , new BasicStroke( 1.0f ) );
         renderer.setSeriesStroke( 1 , new BasicStroke( 1.0f ) );
         renderer.setSeriesStroke( 2 , new BasicStroke( 1.0f ) );
         renderer.setSeriesStroke( 3 , new BasicStroke( 1.0f ) );
+        renderer.setSeriesStroke( 4 , new BasicStroke( 1.0f ) );
         plot.setRenderer( renderer );
         setContentPane( chartPanel );
     }
 
-    private JFreeChart createPanel(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR){
+    private JFreeChart createPanel(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR, ArrayList<Integer> hintsBest){
         JFreeChart jfreechart = ChartFactory.createScatterPlot(
-                "Frames vs Hints", "Hints", "Frames", (XYDataset) createDataset(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR),
+                "Frames vs Hints", "Frames", "Hints", (XYDataset) createDataset(startFrame, hintsFIFO, hintsMRU, hintsSecondChance, hintsNUR, hintsBest),
                 PlotOrientation.VERTICAL, true, true, false);
 
         XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
 
         NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        domain.setRange(hintsFIFO.get(0), hintsMRU.get(hintsMRU.size() - 1));
-        domain.setTickUnit(new NumberTickUnit(500.0));
+        domain.setRange(startFrame, hintsFIFO.size() + startFrame);
+        domain.setTickUnit(new NumberTickUnit(1.0));
         domain.setVerticalTickLabels(true);
 
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(startFrame, hintsFIFO.size() + startFrame);
-        range.setTickUnit(new NumberTickUnit(1.0));
+        range.setRange(hintsFIFO.get(0), hintsMRU.get(hintsMRU.size() - 1));
+        range.setTickUnit(new NumberTickUnit(1000.0));
 
         return  jfreechart;
     }
 
-    private XYDataset createDataset(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR) {
+    private XYDataset createDataset(int startFrame, ArrayList<Integer> hintsFIFO, ArrayList<Integer> hintsMRU, ArrayList<Integer> hintsSecondChance, ArrayList<Integer> hintsNUR, ArrayList<Integer> hintsBest) {
 
-            final XYSeries FIFO = new XYSeries( "FIFO" );
-            double frames = (double) startFrame;
-            for(Integer hint: hintsFIFO) {
-                FIFO.add((double) hint, frames);
-                frames++;
-            }
+        final XYSeries fifo = new XYSeries( "FIFO" );
+        double frames = (double) startFrame;
+        for(Integer hint: hintsFIFO) {
+            fifo.add(frames, (double) hint);
+            frames++;
+        }
 
-            frames = (double) startFrame;
-            final XYSeries MRU = new XYSeries( "MRU" );
-            for(Integer hint: hintsMRU) {
-                MRU.add((double) hint, frames);
-                frames++;
-            }
+        frames = (double) startFrame;
+        final XYSeries mru = new XYSeries( "MRU" );
+        for(Integer hint: hintsMRU) {
+            mru.add(frames, (double) hint);
+            frames++;
+        }
 
-            frames = (double) startFrame;
-            final XYSeries secondChance = new XYSeries( "Second Chance" );
-            for(Integer hint: hintsSecondChance) {
-                secondChance.add((double) hint, frames);
-                frames++;
-            }
+        frames = (double) startFrame;
+        final XYSeries secondChance = new XYSeries( "Second Chance" );
+        for(Integer hint: hintsSecondChance) {
+            secondChance.add(frames, (double) hint);
+            frames++;
+        }
 
-            frames = (double) startFrame;
-            final XYSeries NUR = new XYSeries( "NUR" );
-            for(Integer hint: hintsNUR) {
-                NUR.add((double) hint, frames);
-                frames++;
-            }
+        frames = (double) startFrame;
+        final XYSeries nur = new XYSeries( "NUR" );
+        for(Integer hint: hintsNUR) {
+            nur.add(frames, (double) hint);
+            frames++;
+        }
 
-            final XYSeriesCollection dataset = new XYSeriesCollection( );
-            dataset.addSeries( FIFO );
-            dataset.addSeries( MRU );
-            dataset.addSeries( secondChance );
-            dataset.addSeries( NUR );
+        frames = (double) startFrame;
+        final XYSeries best = new XYSeries( "Best" );
+        for(Integer hint: hintsBest) {
+            best.add(frames, (double) hint);
+            frames++;
+        }
 
-            return dataset;
+        final XYSeriesCollection dataset = new XYSeriesCollection( );
+        dataset.addSeries( fifo );
+        dataset.addSeries( mru );
+        dataset.addSeries( secondChance );
+        dataset.addSeries( nur );
+        dataset.addSeries(best);
+
+        return dataset;
     }
 }
